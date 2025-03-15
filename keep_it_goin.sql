@@ -209,3 +209,15 @@ FROM salaries
 WHERE 1=1
 	-- AND year IS NOT NULL
 LIMIT 20;
+
+-- lvl 5 groupping
+--
+SELECT DISTINCT
+	job_title
+	, exp_lvl
+	, ROUND (AVG (salary_in_usd),2)		AS avg_sal
+	, COUNT (job_title)
+FROM salaries
+WHERE 1=1
+GROUP BY 
+	job_title, exp_lvl;
