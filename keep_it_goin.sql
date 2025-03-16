@@ -210,14 +210,48 @@ WHERE 1=1
 	-- AND year IS NOT NULL
 LIMIT 20;
 
--- lvl 5 groupping
+-- lvl 5 groupping #1
 --
 SELECT DISTINCT
 	job_title
 	, exp_lvl
-	, ROUND (AVG (salary_in_usd),2)		AS avg_sal
-	, COUNT (job_title)
+	, ROUND (AVG (salary_in_usd * 42),2)		AS avg_sal
+	, COUNT (job_title)			AS job_nmb
 FROM salaries
 WHERE 1=1
 GROUP BY 
-	job_title, exp_lvl;
+	job_title, exp_lvl
+ORDER BY 1,2 DESC;
+
+-- lvl 5 groupping #2
+SELECT
+	job_title
+	-- , COUNT(*) AS job_nmb
+	, ROUND(AVG(salary_in_usd * 42), 2)	AS sal_avg_UAH
+
+FROM salaries
+WHERE year = 2023
+GROUP BY job_title
+HAVING
+	COUNT(*) = 2
+	AND ROUND(AVG(salary_in_usd * 42), 2) > 4000000
+ORDER BY 2 ASC
+;
+--lvl 6 nested queries
+SELECT *
+FROM salaries
+WHERE salary_in_usd > --порівння з сер. ЗП
+(
+	SELECT AVG(salary_in_usd)
+	FROM salaries
+	WHERE year = 2023
+)
+	AND year = 2023;
+
+-- lvl 6 nested queries (HARDMODE)
+/*
+Задача:
+Вивести всіх спеціалістів, які живуть в країнах,
+де середня ЗП вища за середню усіх країн.
+*/
+
