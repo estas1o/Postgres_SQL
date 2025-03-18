@@ -254,4 +254,136 @@ WHERE salary_in_usd > --порівння з сер. ЗП
 Вивести всіх спеціалістів, які живуть в країнах,
 де середня ЗП вища за середню усіх країн.
 */
+--1. пошук сер ЗП
+--2. по кожній країні - середня ЗП
+--3. порівнюємо, виводимо перелік країн
+--4. спеціалісти, що проживають в цих країнах
+SELECT *
+FROM salaries;
+--
+SELECT
+	comp_location
+FROM salaries
+WHERE year = 2023
+GROUP BY
+	comp_location
+HAVING AVG(salary_in_usd) >
+(
+	SELECT AVG(salary_in_usd)
+	FROM salaries
+		WHERE year = 2023
+)
+--4
+-- SELECT *
+-- FROM salaries
+-- WHERE emp_loc IN
+-- (
+-- SELECT
+-- 	comp_location
+-- FROM salaries
+-- WHERE year = 2023
+-- GROUP BY
+-- 	comp_location
+-- HAVING AVG(salary_in_usd) >
+-- (
+-- 	SELECT AVG(salary_in_usd)
+-- 	FROM salaries
+-- 	WHERE year = 2023
+-- )
+-- )--if u select specific text from line 276 to 293 it's working!
+;
+
+/*
+Знайти мінімальну ЗП
+серед максимальних ЗП
+по країнах у 2023 році
+*/
+--1. макс ЗП по країнах у 2023р
+--2. знайти мін ЗП
+-------------------
+--1.
+SELECT
+	comp_location
+	, MAX(salary_in_usd)
+FROM salaries
+GROUP BY 1;
+
+--2.
+SELECT MIN(t.salary_in_usd)
+FROM
+(
+SELECT
+	comp_location
+	, MAX(salary_in_usd) AS salary_in_usd
+FROM salaries
+GROUP BY 1
+) AS t
+;
+--альтернатива попередьому рішенню
+SELECT
+	comp_location
+	, MAX(salary_in_usd) AS salary_in_usd
+FROM salaries
+GROUP BY 1
+ORDER BY 2 ASC
+LIMIT 1;
+
+/*
+По кожній професії вивести різницю між сер ЗП
+та макс ЗП усіх спеціалістів
+*/
+
+--1. Макс ЗП
+--2. табл професій і середніх ЗП
+--3. Результат
+
+SELECT MAX(salary_in_usd)
+FROM salaries;
+
+SELECT
+	job_title
+	, AVG(salary_in_usd) -
+(
+SELECT MAX(salary_in_usd)
+FROM salaries
+) AS diff
+FROM salaries
+GROUP BY job_title --1
+;
+
+/*
+Вивести дані по співробітнику, який отримує
+другу по розміру ЗП в таблиці
+*/
+SELECT *
+FROM
+(
+SELECT *
+FROM salaries
+ORDER BY salary_in_usd DESC
+LIMIT 2
+) AS t
+ORDER BY salary_in_usd ASC
+LIMIT 1
+;
+--same solution using offset
+SELECT *
+FROM salaries
+ORDER BY salary_in_usd DESC
+LIMIT 1 OFFSET 1;
+
+-- 6-7
+
+SELECT *
+FROM salaries
+LIMIT 10;
+
+SELECT COUNT(*)
+FROM salaries;
+
+SELECT
+	COUNT(*)
+	, COUNT(*) - COUNT(salary_in_usd) AS missing_values
+FROM salaries;
+
 
