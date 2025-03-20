@@ -386,4 +386,41 @@ SELECT
 	, COUNT(*) - COUNT(salary_in_usd) AS missing_values
 FROM salaries;
 
+-- next lvl
 
+SELECT
+	job_title
+	, exp_lvl
+	, MIN(salary_in_usd)
+	, MAX(salary_in_usd)
+	, ROUND(AVG(salary_in_usd)) AS avg
+	, stddev(salary_in_usd)
+FROM salaries
+GROUP BY 1, 2
+-- ORDER BY 2 DESC
+-- LIMIT 10
+;
+
+SELECT
+	salary_in_usd
+	, COUNT(*)
+FROM salaries
+GROUP BY 1
+ORDER BY 2 DESC
+;
+SELECT
+	CASE
+		WHEN salary_in_usd <= 10000 THEN 'A'
+		WHEN salary_in_usd <= 20000 THEN 'B'
+		WHEN salary_in_usd <= 5000 THEN 'C'
+		WHEN salary_in_usd <= 100000 THEN 'D'
+		WHEN salary_in_usd <= 200000 THEN 'E'
+		ELSE 'F' END AS salary_category
+	, COUNT(*)
+FROM salaries
+GROUP BY 1
+;
+
+SELECT
+	corr(remote_ratio )
+		
