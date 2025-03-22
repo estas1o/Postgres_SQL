@@ -1,10 +1,24 @@
+--first one
 SELECT
     p.product_name
     , s.year
     , s.price
 FROM Sales s LEFT JOIN Product p ON s.product_id = p.product_id;
 
+--second one
 SELECT
     u.unique_id
     , e.name
 FROM Employees e LEFT JOIN EmployeeUNI u ON e.id = u.id;
+
+--third one
+SELECT
+    v.customer_id
+    , COUNT(CASE
+        WHEN t.transaction_id IS NULL
+        THEN 1 END)   AS count_no_trans
+    FROM Visits v LEFT JOIN Transactions t ON v.visit_id = t.visit_id
+    WHERE t.transaction_id IS NULL
+    GROUP BY 
+        v.customer_id
+        , t.transaction_id;
