@@ -22,3 +22,5 @@ SELECT
     GROUP BY 
         v.customer_id
         , t.transaction_id;
+
+--quad damage :D
